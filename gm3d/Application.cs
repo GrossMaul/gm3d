@@ -9,8 +9,6 @@ using Color = System.Drawing.Color;
 
 public class App : Application
 {
-    private const float CIRCLE_STEP_SIZE = MathF.PI / 16;
-
     private Window _window;
     private Renderer _renderer;
 
@@ -27,8 +25,6 @@ public class App : Application
 
     private Matrix4x4 _camRotationMatrixY;
     private Matrix4x4 _camRotationMatrixX;
-
-    private Matrix4x4 _circleRotationMatrix = Matrix4x4.CreateRotationX(MathF.PI / 2);
 
     private readonly Texture2D TextureAtlas;
 
@@ -145,7 +141,7 @@ public class App : Application
                 MathF.Sin(_pitch),
                 MathF.Cos(_pitch) * MathF.Cos(-_yaw)
         );
-        
+
         _renderer.RenderDebugText(new Vector2(20, 60), $"Forward: {forward}", Color.White);
         _renderer.RenderDebugText(new Vector2(20, 80), $"Cubes amount: {_cubes.Count}", Color.White);
 
