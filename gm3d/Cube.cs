@@ -38,10 +38,10 @@ public class Cube
         0,5,4
     };
 
-    public Texture2D Texture;
+    public Color Color;
 
-    public Cube(Texture2D texture)
+    public Cube(Color color)
     {
-        Texture = texture; 
+        Color = color;
     }
 }

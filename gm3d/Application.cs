@@ -26,8 +26,6 @@ public class App : Application
     private Matrix4x4 _camRotationMatrixY;
     private Matrix4x4 _camRotationMatrixX;
 
-    private readonly Texture2D TextureAtlas;
-
     private Networker? _networker;
 
     public App()
@@ -36,9 +34,6 @@ public class App : Application
         _window.SetWindowResizable(true);
 
         AssetManager.SetAssetRootDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets"));
-        TextureAtlas = AssetManager.LoadTexture("TextureAtlas.png", _renderer);
-
-        AssetManager.AddTextureRegion("Dirt", new TextureRegion("TextureAtlas", 0, 0, 16, 16));
 
         _renderer.SetVSyncEnabled(true);
         _renderer.SetRenderBlendMode(BlendMode.Blend);
@@ -50,7 +45,7 @@ public class App : Application
         {
             for (int z = 0; z < 50; z++)
             {
-                _cubes.Add(new Vector3(x, -1, z), new Cube(AssetManager.GetTexture("Dirt")));
+                _cubes.Add(new Vector3(x * 2, -1, z * 2), new Cube(Color.FromArgb(125, 58, 11)));
             }
         }
 
@@ -131,7 +126,7 @@ public class App : Application
 
         foreach (var kvp in _cubes)
         {
-            RenderCube(_renderer, kvp.Key, kvp.Value.Texture);
+            RenderCube(_renderer, kvp.Key, kvp.Value.Color);
         }
 
         _renderer.RenderDebugText(new Vector2(20), $"{(int)_fps}", Color.White);
@@ -170,7 +165,7 @@ public class App : Application
         );
     }
 
-    private void RenderCube(Renderer renderer, Vector3 position, Texture2D texture)
+    private void RenderCube(Renderer renderer, Vector3 position, Color color)
     {
         SDL.Vertex[] vertices = new SDL.Vertex[Cube.Vertices.Length];
         for (int i = 0; i < vertices.Length; i++)
@@ -183,11 +178,10 @@ public class App : Application
             vertices[i] = new SDL.Vertex()
             {
                 Position = new SDL.FPoint { X = screenVertexPosition.X, Y = screenVertexPosition.Y },
-                Color = new SDL.FColor { R = 1, G = 1, B = 1, A = 1 },
-                TexCoord = new SDL.FPoint {  }
+                Color = new SDL.FColor { R = color.R / 255f, G = color.G / 255f, B = color.B / 255f, A = 1 },
             };
         }
 
-        SDL.RenderGeometry(renderer.Handle, texture.Handle, vertices, vertices.Length, Cube.Indices, Cube.Indices.Length);
+        SDL.RenderGeometry(renderer.Handle, 0, vertices, vertices.Length, Cube.Indices, Cube.Indices.Length);
     }
 }
