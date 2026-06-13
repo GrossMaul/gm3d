@@ -28,7 +28,7 @@ public class App : Application
 
     private readonly Texture2D TextureAtlas;
 
-    private Networker _networker;
+    private Networker? _networker;
 
     public App()
     {
@@ -54,8 +54,9 @@ public class App : Application
             }
         }
 
-        string ip = Environment.GetEnvironmentVariable("GM_SERVER_ADDRESS")!;
-        _networker = new("Aarono", ip, 4389);
+        string? ip = Environment.GetEnvironmentVariable("GM_SERVER_ADDRESS")!;
+        if (ip == null) Console.WriteLine("No Ip specified");
+        else _networker = new("Aarono", ip, 4389);
     }
 
     public override void Update(double deltaTime)
@@ -150,7 +151,7 @@ public class App : Application
 
     public override void End()
     {
-        _networker.CloseConnection();
+        _networker?.CloseConnection();
         _window.Dispose();
         _renderer.Dispose();
         AssetManager.Dispose();
